@@ -124,14 +124,12 @@ public:
 	std::string tostring()
 	{
 		std::string s;
-		s += "import matplotlib.pyplot as plt\n";
 		s += "x = [" + vector2string(x) + "]\n";
 		s += "y = [" + vector2string(y) + "]\n";
 		if (&dict != NULL)
 		{
 			s += "plt.plot(x, y" + dict.print_call()+")\n";	
 		}
-		s += "plt.show()\n";
 		return s;
 	}
 };
@@ -147,7 +145,7 @@ public:
 	};
 	void additional_code(std::string){};
 
-	std::string print_call()
+	std::string print_calls()
 	{
 		std::string s;
 		for (std::vector<PlotCall>::iterator it = PlotCalls.begin(); it!=PlotCalls.end(); it++)
@@ -159,7 +157,9 @@ public:
 	void show()
 	{
 		Py_Initialize();
-		std::string s = this->print_call() ;
+		std::string s = "import matplotlib.pyplot as plt\n";
+		s += this->print_calls() ;
+		s += "plt.show()\n"
 		PyRun_SimpleString(s.c_str());
 		Py_Finalize();
 	};
